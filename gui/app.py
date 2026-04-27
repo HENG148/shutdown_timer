@@ -3,20 +3,18 @@ from core.timer import ShutdownTimer
 from core.platform import PLATFORM
 from utils.history import load_history
 
-
-DARK   = "#0D0D0D"
-PANEL  = "#161616"
-CARD   = "#1E1E1E"
+DARK = "#0D0D0D"
+PANEL = "#161616"
+CARD = "#1E1E1E"
 BORDER = "#2A2A2A"
 ACCENT = "#00E5A0"
-WARN   = "#FF6B35"
-TEXT   = "#F0F0F0"
-MUTED  = "#6B6B6B"
+WARN = "#FF6B35"
+TEXT = "#F0F0F0"
+MUTED = "#6B6B6B"
 FONT_MONO = ("Courier New", 10)
 
 
 def run_gui():
-    """Launch the Tkinter GUI application."""
     try:
         import tkinter as tk
         from tkinter import messagebox
@@ -32,16 +30,14 @@ def run_gui():
 
     timer_ref = [None]
 
-    # ── State Variables ────────────────────────────────────────────────────────
-    hours_var     = tk.StringVar(value="0")
-    minutes_var   = tk.StringVar(value="60")
-    seconds_var   = tk.StringVar(value="0")
-    action_var    = tk.StringVar(value="shutdown")
-    status_var    = tk.StringVar(value="READY")
+    hours_var = tk.StringVar(value="0")
+    minutes_var = tk.StringVar(value="60")
+    seconds_var = tk.StringVar(value="0")
+    action_var = tk.StringVar(value="shutdown")
+    status_var = tk.StringVar(value="READY")
     countdown_var = tk.StringVar(value="00:00:00")
-    progress_var  = tk.DoubleVar(value=0.0)
+    progress_var = tk.DoubleVar(value=0.0)
 
-    # ── Helper: Card container ─────────────────────────────────────────────────
     def make_card(parent, title):
         outer = tk.Frame(parent, bg=BORDER, padx=1, pady=1)
         outer.pack(fill="x", padx=20, pady=(0, 12))
@@ -51,15 +47,11 @@ def run_gui():
                  fg=MUTED, bg=CARD).pack(anchor="w")
         return inner
 
-    # ── Header ─────────────────────────────────────────────────────────────────
     header = tk.Frame(root, bg=DARK, pady=24)
     header.pack(fill="x")
-    tk.Label(header, text="SHUTDOWN TIMER",
-             font=("Courier New", 18, "bold"), fg=ACCENT, bg=DARK).pack()
-    tk.Label(header, text=f"v2.0  ·  {PLATFORM.upper()}",
-             font=FONT_MONO, fg=MUTED, bg=DARK).pack()
+    tk.Label(header, text="SHUTDOWN TIMER", font=("Courier New", 18, "bold"), fg=ACCENT, bg=DARK).pack()
+    tk.Label(header, text=f"v2.0  ·  {PLATFORM.upper()}", font=FONT_MONO, fg=MUTED, bg=DARK).pack()
 
-    # ── Time Input ─────────────────────────────────────────────────────────────
     time_card = make_card(root, "SET DURATION")
     time_row  = tk.Frame(time_card, bg=CARD)
     time_row.pack(fill="x", pady=(8, 0))
@@ -85,7 +77,6 @@ def run_gui():
             tk.Label(time_row, text=":", font=("Courier New", 26, "bold"),
                      fg=MUTED, bg=CARD).grid(row=0, column=col + 1)
 
-    # Preset buttons
     presets_row = tk.Frame(time_card, bg=CARD)
     presets_row.pack(fill="x", pady=(12, 0))
     tk.Label(presets_row, text="PRESETS:", font=("Courier New", 9),
@@ -105,16 +96,15 @@ def run_gui():
             command=lambda m=mins: set_preset(m),
         ).pack(side="left", padx=2)
 
-    # ── Action Selection ───────────────────────────────────────────────────────
     action_card = make_card(root, "ACTION")
     action_row  = tk.Frame(action_card, bg=CARD)
     action_row.pack(fill="x", pady=(8, 0))
 
     for val, lbl in [
-        ("shutdown", "⏻ Shutdown"),
-        ("restart",  "↺ Restart"),
-        ("sleep",    "☽ Sleep"),
-        ("hibernate","❄ Hibernate"),
+        ("shutdown",  "⏻ Shutdown"),
+        ("restart",   "↺ Restart"),
+        ("sleep",     "☽ Sleep"),
+        ("hibernate", "❄ Hibernate"),
     ]:
         tk.Radiobutton(
             action_row, text=lbl, variable=action_var, value=val,
@@ -123,9 +113,7 @@ def run_gui():
             activebackground=CARD, relief="flat", cursor="hand2",
         ).pack(side="left", padx=(0, 16))
 
-    # ── Progress Display ───────────────────────────────────────────────────────
     prog_card = make_card(root, "PROGRESS")
-
     tk.Label(prog_card, textvariable=countdown_var,
              font=("Courier New", 36, "bold"), fg=ACCENT, bg=CARD).pack(pady=(8, 4))
     tk.Label(prog_card, textvariable=status_var,
@@ -145,7 +133,6 @@ def run_gui():
             prog_canvas.create_rectangle(0, 0, fill_w, 6,
                                          fill=color, outline="", tags="bar")
 
-    # ── Control Buttons ────────────────────────────────────────────────────────
     btn_frame = tk.Frame(root, bg=DARK)
     btn_frame.pack(fill="x", padx=20, pady=12)
 
@@ -171,7 +158,6 @@ def run_gui():
     start_btn.pack(side="left", padx=(0, 8))
     cancel_btn.pack(side="left")
 
-    # ── History Panel ──────────────────────────────────────────────────────────
     hist_card = make_card(root, "RECENT HISTORY")
     hist_text = tk.Text(
         hist_card, height=5, font=("Courier New", 9),
@@ -191,7 +177,6 @@ def run_gui():
 
     refresh_history()
 
-    # ── Timer Callbacks ────────────────────────────────────────────────────────
     total_ref = [0]
 
     def on_tick(remaining):
@@ -223,7 +208,6 @@ def run_gui():
             refresh_history(),
         ])
 
-    # ── Start / Cancel Logic ───────────────────────────────────────────────────
     def start_timer():
         try:
             h = int(hours_var.get() or 0)
@@ -231,11 +215,9 @@ def run_gui():
             s = int(seconds_var.get() or 0)
             total = h * 3600 + m * 60 + s
             if total <= 0:
-                from tkinter import messagebox
                 messagebox.showerror("Invalid", "Please enter a duration > 0.")
                 return
         except ValueError:
-            from tkinter import messagebox
             messagebox.showerror("Invalid", "Hours/Minutes/Seconds must be numbers.")
             return
 
@@ -260,10 +242,8 @@ def run_gui():
     start_btn.config(command=start_timer)
     cancel_btn.config(command=cancel_timer)
 
-    # ── Window Close Handler ───────────────────────────────────────────────────
     def on_close():
         if timer_ref[0] and not timer_ref[0].cancelled:
-            from tkinter import messagebox
             if messagebox.askyesno("Timer Running",
                                    "A timer is active. Cancel it and exit?"):
                 timer_ref[0].cancel()
@@ -273,5 +253,4 @@ def run_gui():
 
     root.protocol("WM_DELETE_WINDOW", on_close)
     prog_canvas.bind("<Configure>", lambda e: draw_progress(progress_var.get()))
-
     root.mainloop()
