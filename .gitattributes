@@ -1,3 +1,6 @@
 # .gitattributes
 *.spec linguist-detectable=false
 *.spec linguist-language=Python
+
+*.tex linguist-detectable=false
+*.py linguist-language=Python
