@@ -16,25 +16,25 @@ PLATFORM = get_platform()
 
 SHUTDOWN_COMMANDS = {
   "windows": {
-    "shutdown":  ["shutdown", "/s", "/t", "0"],
-    "restart":   ["shutdown", "/r", "/t", "0"],
+    "shutdown": ["shutdown", "/s", "/t", "0"],
+    "restart": ["shutdown", "/r", "/t", "0"],
     "hibernate": ["shutdown", "/h"],
-    "sleep":     ["rundll32.exe", "powrprof.dll,SetSuspendState", "0,1,0"],
-    "cancel":    ["shutdown", "/a"],
+    "sleep": ["rundll32.exe", "powrprof.dll,SetSuspendState", "0,1,0"],
+    "cancel": ["shutdown", "/a"],
   },
   "macos": {
-    "shutdown":  ["sudo", "shutdown", "-h", "now"],
-    "restart":   ["sudo", "shutdown", "-r", "now"],
+    "shutdown": ["sudo", "shutdown", "-h", "now"],
+    "restart": ["sudo", "shutdown", "-r", "now"],
     "hibernate": ["pmset", "sleepnow"],
-    "sleep":     ["pmset", "sleepnow"],
-    "cancel":    None,
+    "sleep": ["pmset", "sleepnow"],
+    "cancel": None,
   },
   "linux": {
-    "shutdown":  ["sudo", "shutdown", "-h", "now"],
-    "restart":   ["sudo", "shutdown", "-r", "now"],
+    "shutdown": ["sudo", "shutdown", "-h", "now"],
+    "restart": ["sudo", "shutdown", "-r", "now"],
     "hibernate": ["systemctl", "hibernate"],
-    "sleep":     ["systemctl", "suspend"],
-    "cancel":    ["sudo", "shutdown", "-c"],
+    "sleep": ["systemctl", "suspend"],
+    "cancel": ["sudo", "shutdown", "-c"],
   },
 }
 

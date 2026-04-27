@@ -24,7 +24,7 @@ def parse_args():
 if __name__ == "__main__":
   args =parse_args()
   if args.cli:
-    from cli.eeee import run_cli
+    from cli.runner import run_cli
     run_cli(args)
   else:
     from gui.app import run_gui
